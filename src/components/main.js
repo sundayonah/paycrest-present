@@ -3,6 +3,7 @@ import { StakingContext } from '@/Context/StakeContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAccount } from 'wagmi';
 import { Loading } from './Loading';
+import Image from 'next/image';
 
 const MainPage = () => {
    const {
@@ -50,12 +51,13 @@ const MainPage = () => {
       <main className="max-w-5xl mx-auto px-4 mt-28">
          <Toaster />
          <div className="flex justify-center">
-            <img
+            <Image
                src="/markalone=no.png"
                alt="logo-image"
+               width={250}
+               height={50}
                // className="h-32 lg:w-90 w-70"
-               className="h-24 lg:w-70 w-66"
-               // style="max-width:100% height:auto"
+               // className="h-24 w-54 lg:w-70"
             />
          </div>
 
