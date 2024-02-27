@@ -102,28 +102,28 @@ export const PaycrestContextProvider = ({ children }) => {
       return message; // Return the message as a string
    };
 
-   const publicKeyPEM = `-----BEGIN RSA PUBLIC KEY-----
- MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxJRz+N75XK2ZU8q7eWci
- d/ns5Ita2ys1Grhu1t4I6HY64LzKpPY70mxq+rl8PdVuRNTPuho6Oo6dH5l37TI9
- TAlDmt8pnI7G3Chxj0OcAcZiZEdSnbGECbIlbaEJ/iayuftH62FTTLVEDJH92GFD
- ucrqiY36vis0TKL9YtwcEd9+vXvNT9kXjj9jayUz/bjWPdw8s8dqMJ5HsacRsLOL
- IiST3issvAN+vgB6WCnDemnuIbZp1RL84Ns/T1xNTkIrq3Vae73anSdF/5Qwr56p
- 0lrYaABmay67KlVPPR/7Zw5HU5r5iMoC6ULaAqPQ2kDbfCAULJGjXBybFfTwyJog
- hQIDAQAB
- -----END RSA PUBLIC KEY-----`;
+   //    const publicKeyPEM = `-----BEGIN RSA PUBLIC KEY-----
+   //  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxJRz+N75XK2ZU8q7eWci
+   //  d/ns5Ita2ys1Grhu1t4I6HY64LzKpPY70mxq+rl8PdVuRNTPuho6Oo6dH5l37TI9
+   //  TAlDmt8pnI7G3Chxj0OcAcZiZEdSnbGECbIlbaEJ/iayuftH62FTTLVEDJH92GFD
+   //  ucrqiY36vis0TKL9YtwcEd9+vXvNT9kXjj9jayUz/bjWPdw8s8dqMJ5HsacRsLOL
+   //  IiST3issvAN+vgB6WCnDemnuIbZp1RL84Ns/T1xNTkIrq3Vae73anSdF/5Qwr56p
+   //  0lrYaABmay67KlVPPR/7Zw5HU5r5iMoC6ULaAqPQ2kDbfCAULJGjXBybFfTwyJog
+   //  hQIDAQAB
+   //  -----END RSA PUBLIC KEY-----`;
 
-   // Parse the provider's public key
-   const publicKey = crypto.createPublicKey(publicKeyPEM);
+   // // Parse the provider's public key
+   // const publicKey = crypto.createPublicKey(publicKeyPEM);
 
-   const messageHash = generateMessageHash(accountNumber, bank, accountName);
+   // const messageHash = generateMessageHash(accountNumber, bank, accountName);
 
-   // Use the public key for encryption
-   const encryptedMessageHash = crypto.publicEncrypt(
-      publicKey,
-      Buffer.from(messageHash)
-   );
+   // // Use the public key for encryption
+   // const encryptedMessageHash = crypto.publicEncrypt(
+   //    publicKey,
+   //    Buffer.from(messageHash)
+   // );
 
-   console.log(encryptedMessageHash.toString('base64'));
+   // console.log(encryptedMessageHash.toString('base64'));
 
    // Assuming you have functions to handle input changes for account number, bank, and account name
    const handleAccountNumberChange = (e) => {
@@ -210,7 +210,7 @@ export const PaycrestContextProvider = ({ children }) => {
          if (receipt.status === 1) {
             setPaycrestLoading(false);
 
-            toast.success(`Staked Successfully`, {
+            toast.success(`Order created Successfully`, {
                duration: 4000,
                position: 'top-right',
                icon: '✅',
