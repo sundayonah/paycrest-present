@@ -1,4 +1,4 @@
-import { StakingContextProvider } from '@/Context/StakeContext';
+import { PaycrestContextProvider } from '@/Context/PaycrestContext';
 import '@/styles/globals.css';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 
@@ -34,9 +34,9 @@ createWeb3Modal({ wagmiConfig, projectId, chains });
 export default function App({ Component, pageProps }) {
    return (
       <WagmiConfig config={wagmiConfig}>
-         <StakingContextProvider>
+         <PaycrestContextProvider>
             <Component {...pageProps} />
-         </StakingContextProvider>
+         </PaycrestContextProvider>
       </WagmiConfig>
    );
 }

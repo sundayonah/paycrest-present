@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StakingContext } from '@/Context/StakeContext';
+import { PaycrestContext } from '@/Context/PaycrestContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAccount } from 'wagmi';
 import { Loading } from './Loading';
@@ -7,25 +7,19 @@ import Image from 'next/image';
 
 const MainPage = () => {
    const {
-      UnStake,
-      Stake,
-      stakeAmount,
-      handleChange,
-      handleMaxButtonClick,
-      maxBalance,
-      totalStaker,
-      totalAmountStake,
-      walletBalance,
-      calculateReward,
-      Claim,
-      Approved,
-      isApproved,
-      ethBalance,
-      unStakeLoading,
-      claimLoading,
-      approvedLoading,
-      stakeLoading,
-   } = useContext(StakingContext);
+      paycrestAmount,
+      setPaycrestAmount,
+      label,
+      setLabel,
+      handleAccountNameChange,
+      handleAccountNumberChange,
+      handleBankChange,
+      accountName,
+      accountNumber,
+      bank,
+      paycrestLoading,
+      CreateOrder,
+   } = useContext(PaycrestContext);
 
    const { address } = useAccount();
 
@@ -33,18 +27,6 @@ const MainPage = () => {
 
    const handleButtonAboveClick = (buttonState) => {
       setStakeButtonState(buttonState);
-   };
-
-   const handleStakeAndUnStakeChange = async () => {
-      if (stakeButtonState === 'Stake') {
-         if (isApproved) {
-            Stake();
-         } else {
-            await Approved();
-         }
-      } else {
-         await UnStake();
-      }
    };
 
    return (
@@ -63,18 +45,50 @@ const MainPage = () => {
 
          <div className="max-w-[65%] lg:w-[40%] flex flex-col p-4 mt-16 mx-auto border gap-4 border-gray-600 rounded-md shadow-shadow2">
             <label>Amount</label>
-            <input className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm" />
+            <input
+               onChange={(e) => setPaycrestAmount(e.target.value)}
+               value={paycrestAmount}
+               className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm"
+               placeholder="0.0"
+            />
             <label>Account Number</label>
-            <input className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm" />
+            <input
+               onChange={handleAccountNumberChange}
+               value={accountNumber}
+               className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm"
+               placeholder="0123456789"
+            />
             <label>Bank</label>
-            <input className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm" />
+            <input
+               onChange={handleBankChange}
+               value={bank}
+               className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm"
+               placeholder="Paycrest Bank"
+            />
             <label>Account Name</label>
-            <input className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm" />
+            <input
+               onChange={handleAccountNameChange}
+               value={accountName}
+               className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm"
+               placeholder="Pay crest"
+            />
+
+            <label>Label</label>
+
+            <input
+               onChange={(e) => setLabel(e.target.value)}
+               value={label}
+               className="bg-transparent border border-gray-600 rounded-md outline-none px-2 py-1 text-sm"
+               placeholder="Message"
+            />
          </div>
 
          <div className="max-w-[30%]  mx-auto flex justify-center p-1 mt-6   rounded-md">
-            <button className="py-0.5 px-20 lg:px-32 rounded-md bg-[#0065f5] hover:bg-[#0065f5]/70">
-               PAY
+            <button
+               onClick={CreateOrder}
+               className="py-0.5 px-20 lg:px-32 rounded-md bg-[#0065f5] hover:bg-[#0065f5]/70"
+            >
+               {paycrestLoading ? <Loading /> : 'PAY'}
             </button>
          </div>
       </main>
