@@ -7,6 +7,7 @@ import paycrestAbi from '@/Contract/paycrest.json';
 import approveAbi from '@/Contract/approve.json';
 import toast, { Toaster } from 'react-hot-toast';
 import { keccak256 } from 'ethers/lib/utils';
+import crypto from 'crypto';
 
 // import axios from 'axios';
 
@@ -101,8 +102,7 @@ export const PaycrestContextProvider = ({ children }) => {
       return message; // Return the message as a string
    };
 
-   /*
------BEGIN RSA PUBLIC KEY-----
+   const publicKeyPEM = `-----BEGIN RSA PUBLIC KEY-----
  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxJRz+N75XK2ZU8q7eWci
  d/ns5Ita2ys1Grhu1t4I6HY64LzKpPY70mxq+rl8PdVuRNTPuho6Oo6dH5l37TI9
  TAlDmt8pnI7G3Chxj0OcAcZiZEdSnbGECbIlbaEJ/iayuftH62FTTLVEDJH92GFD
@@ -110,9 +110,20 @@ export const PaycrestContextProvider = ({ children }) => {
  IiST3issvAN+vgB6WCnDemnuIbZp1RL84Ns/T1xNTkIrq3Vae73anSdF/5Qwr56p
  0lrYaABmay67KlVPPR/7Zw5HU5r5iMoC6ULaAqPQ2kDbfCAULJGjXBybFfTwyJog
  hQIDAQAB
- -----END RSA PUBLIC KEY-----
+ -----END RSA PUBLIC KEY-----`;
 
-*/
+   // Parse the provider's public key
+   const publicKey = crypto.createPublicKey(publicKeyPEM);
+
+   const messageHash = generateMessageHash(accountNumber, bank, accountName);
+
+   // Use the public key for encryption
+   const encryptedMessageHash = crypto.publicEncrypt(
+      publicKey,
+      Buffer.from(messageHash)
+   );
+
+   console.log(encryptedMessageHash.toString('base64'));
 
    // Assuming you have functions to handle input changes for account number, bank, and account name
    const handleAccountNumberChange = (e) => {
@@ -129,7 +140,7 @@ export const PaycrestContextProvider = ({ children }) => {
 
    ///// STAKE F(x) ///////////
    const CreateOrder = async () => {
-      console.log('hello create order');
+      // console.log('hello create order');
       setPaycrestLoading(true);
       try {
          const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -161,15 +172,15 @@ export const PaycrestContextProvider = ({ children }) => {
             accountName
          );
 
-         console.log(messageHash);
+         // console.log(messageHash);
 
          const _rate = 1000;
          const senderFee = 50;
          // const stringAmount = _amount.toString();
 
-         console.log(_amount);
+         // console.log(_amount);
 
-         console.log({ _label, _amount, messageHash, _rate, senderFee });
+         // console.log({ _label, _amount, messageHash, _rate, senderFee });
 
          const tx = await contract.createOrder(
             createOrderToken,
@@ -260,7 +271,7 @@ export const PaycrestContextProvider = ({ children }) => {
 
          // Convert the input paycrestAmount to Ether
          const _amount = ethers.utils.parseUnits(paycrestAmount, '6');
-         console.log(_amount.toString());
+         // console.log(_amount.toString());
          const amountToString = _amount.toString();
 
          // estimatesGas//////////
