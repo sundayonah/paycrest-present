@@ -15,7 +15,7 @@ export const PaycrestContext = createContext({});
 export const PaycrestContextProvider = ({ children }) => {
    // testnet
    const paycrestContractAddress = '0xba31A1adb519A2C76475cE231FB1445047971358';
-   const createOrderToken = '0x3870419Ba2BBf0127060bCB37f69A1b1C090992B';
+   const createOrderToken = '0x9999f7Fea5938fD3b1E26A12c3f2fb024e194f97';
    const institutionCode =
       '0x41424e474e474c41000000000000000000000000000000000000000000000000';
 
@@ -33,6 +33,7 @@ export const PaycrestContextProvider = ({ children }) => {
    const [paycrestLoading, setPaycrestLoading] = useState(false);
    const [approvedLoading, setApprovedLoading] = useState(false);
    const [paycrestAmount, setPaycrestAmount] = useState('');
+   const [isApproved, setIsApproved] = useState(false);
 
    const [message, setMessage] = useState('');
    const [label, setLabel] = useState('');
@@ -100,15 +101,18 @@ export const PaycrestContextProvider = ({ children }) => {
       return message; // Return the message as a string
    };
 
-   // const generateMessageHash = (accountNumber, bank, accountName) => {
-   //    const message = `${accountNumber},${bank},${accountName}`;
-   //    console.log(message);
-   //    // const hashBytes = ethers.utils.keccak256(
-   //    //    ethers.utils.toUtf8Bytes(message)
-   //    // );
-   //    // console.log(hashBytes);
-   //    return ethers.utils.hexlify(mess);
-   // };
+   /*
+-----BEGIN RSA PUBLIC KEY-----
+ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxJRz+N75XK2ZU8q7eWci
+ d/ns5Ita2ys1Grhu1t4I6HY64LzKpPY70mxq+rl8PdVuRNTPuho6Oo6dH5l37TI9
+ TAlDmt8pnI7G3Chxj0OcAcZiZEdSnbGECbIlbaEJ/iayuftH62FTTLVEDJH92GFD
+ ucrqiY36vis0TKL9YtwcEd9+vXvNT9kXjj9jayUz/bjWPdw8s8dqMJ5HsacRsLOL
+ IiST3issvAN+vgB6WCnDemnuIbZp1RL84Ns/T1xNTkIrq3Vae73anSdF/5Qwr56p
+ 0lrYaABmay67KlVPPR/7Zw5HU5r5iMoC6ULaAqPQ2kDbfCAULJGjXBybFfTwyJog
+ hQIDAQAB
+ -----END RSA PUBLIC KEY-----
+
+*/
 
    // Assuming you have functions to handle input changes for account number, bank, and account name
    const handleAccountNumberChange = (e) => {
@@ -150,7 +154,7 @@ export const PaycrestContextProvider = ({ children }) => {
             return;
          }
          const _label = ethers.utils.formatBytes32String(label);
-         const _amount = ethers.utils.parseEther(paycrestAmount);
+         const _amount = ethers.utils.parseUnits(paycrestAmount, '6');
          const messageHash = generateMessageHash(
             accountNumber,
             bank,
@@ -220,7 +224,7 @@ export const PaycrestContextProvider = ({ children }) => {
    ///// APPROVE F(x) ///////////
    const Approved = async () => {
       // console.log('hello approve');
-      setApprovedLoading(true);
+      setPaycrestLoading(true);
       // setLessAmount(false);
 
       if (address === undefined) {
@@ -249,14 +253,14 @@ export const PaycrestContextProvider = ({ children }) => {
          // const instanceContract = getContract();
 
          const contractInstance = new ethers.Contract(
-            '0xba0161322A09AbE48F06cE5656c1b66bFB01BE56',
+            createOrderToken,
             approveAbi,
             signer
          );
 
          // Convert the input paycrestAmount to Ether
-         const _amount = ethers.utils.parseEther(paycrestAmount, 'ether');
-         // console.log(_amount);
+         const _amount = ethers.utils.parseUnits(paycrestAmount, '6');
+         console.log(_amount.toString());
          const amountToString = _amount.toString();
 
          // estimatesGas//////////
@@ -296,7 +300,7 @@ export const PaycrestContextProvider = ({ children }) => {
             });
 
             setIsApproved(true);
-            setApprovedLoading(false);
+            setPaycrestLoading(false);
          } else {
          }
          // }
@@ -307,12 +311,12 @@ export const PaycrestContextProvider = ({ children }) => {
 
          if (error.code === 4001) {
             // User cancelled the transaction, set loading to false
-            setApprovedLoading(false);
+            setPaycrestLoading(false);
          } else {
             // Handle other transaction errors
             console.error(error);
          }
-         setApprovedLoading(false);
+         setPaycrestLoading(false);
       }
 
       // setIsLoading(false);
@@ -335,7 +339,8 @@ export const PaycrestContextProvider = ({ children }) => {
             CreateOrder,
             handleChange,
             Approved,
-            // setIsApproved,
+            setIsApproved,
+            isApproved,
             handleMaxButtonClick,
          }}
       >

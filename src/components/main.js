@@ -19,6 +19,8 @@ const MainPage = () => {
       bank,
       paycrestLoading,
       CreateOrder,
+      Approved,
+      isApproved,
    } = useContext(PaycrestContext);
 
    const { address } = useAccount();
@@ -84,11 +86,18 @@ const MainPage = () => {
          </div>
 
          <div className="max-w-[30%]  mx-auto flex justify-center p-1 mt-6   rounded-md">
-            <button
+            {/* <button
                onClick={CreateOrder}
                className="py-0.5 px-20 lg:px-32 rounded-md bg-[#0065f5] hover:bg-[#0065f5]/70"
             >
                {paycrestLoading ? <Loading /> : 'PAY'}
+            </button> */}
+
+            <button
+               onClick={isApproved ? CreateOrder : Approved}
+               className="py-0.5 px-20 lg:px-32 rounded-md bg-[#0065f5] hover:bg-[#0065f5]/70"
+            >
+               {paycrestLoading ? <Loading /> : isApproved ? 'PAY' : 'APPROVE'}
             </button>
          </div>
       </main>
